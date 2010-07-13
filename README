@@ -1,0 +1,12 @@
+README
+======
+Website based on Flask and CouchDB.
+First running example from flask-openid, users stored in CouchDB Database.
+( http://github.com/mitsuhiko/flask-openid/tree/master/example/ )
+
+TOOLS
+-----
+- Flask ( http://flask.pocoo.org/ )
+- CouchDB ( http://couchdb.apache.org/ )
+- Flask-CouchDB ( http://packages.python.org/Flask-CouchDB/ )
+- Flask-OpenID ( http://packages.python.org/Flask-OpenID/ )
