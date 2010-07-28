@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block head %}
+<script type=text/javascript src="{{ url_for('static', filename='main.js') }}"></script>
+{% endblock %}
+{% block body %}
+<div class=blob>
+<form action="" method=post>
+<p><label for=ttitle>Subject </label><input id=ttitle type=text name=subject value=""></p>
+<p><textarea id=edit name=edit></textarea></p>
+<p><input type=submit value="Submit"></p>
+</form>
+</div>
+{% endblock %}
