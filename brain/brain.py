@@ -1,37 +1,60 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, request, g, session, flash, \
-     redirect, url_for, abort
+     redirect, url_for, abort, jsonify
 
-from flaskext.couchdb import CouchDBManager
+from flaskext.couchdb import CouchDBManager, ViewDefinition
 from flaskext.openid import OpenID
+from datetime import datetime
+import uuid
 
 app = Flask(__name__)
 app.config.update(
     COUCHDB_SERVER = 'http://localhost:5984/',
     COUCHDB_DATABASE = 'brain',
-    SECRET_KEY = 'development key',
+    SECRET_KEY = '\xb8n\x9c\xe2&]\x85\x1e\xf1\xf2\x938\xe4SA\xc5\x08\xcf\x00\x92\xf5\x7f\xbe\xc8',
     DEBUG = True
 )
 
 # CouchDB
-manager = CouchDBManager()
-# ...add document types and view definitions...
+manager = CouchDBManager(auto_sync=False)
+all_users_view = ViewDefinition('users', 'all', '''\
+    function (doc) {
+        if (doc.type == 'user') {
+            emit(doc.openid, doc.nickname)
+        };
+    }''')
+all_text_view = ViewDefinition('text', 'all', '''\
+    function (doc) {
+        if (doc.type == 'text') {
+            emit(doc.title, doc.content)
+        };
+    }''')
+manager.add_viewdef((all_users_view, all_text_view))
 manager.setup(app)
+manager.sync(app)
 
 # setup flask-openid
 oid = OpenID(app)
 
 #----------------------------------------#
-
+def get_date():
+    return datetime.utcnow().strftime('%Y/%m/%d %H:%M:%S')
+    
 @app.before_request
 def before_request():
     g.user = None
     if 'openid' in session:
-	g.user = g.couch.get(session['openid'])
+	doc = all_users_view[session['openid']]
+	if doc.total_rows > 0:		# mindestens ein Eintrag gefunden
+	    g.user = doc.rows[0]
+	# ToDo fehler bei mehreren Treffern 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    #return jsonify(g.user)
+    texts = all_text_view()
+    #return jsonify(texts.rows)
+    return render_template('index.html', texts=texts.rows)
     
 @app.route('/login', methods=['GET', 'POST'])
 @oid.loginhandler
@@ -42,8 +65,8 @@ def login():
     # if we are already logged in, go back to were we came from
     if g.user is not None:
         return redirect(oid.get_next_url())
-    if request.method == 'POST':
-        openid = request.form.get('openid')
+    if request.method == 'GET':
+        openid = request.args.get('openid')
         if openid:
             return oid.try_login(openid, ask_for=['email', 'fullname',
                                                   'nickname'])
@@ -59,8 +82,9 @@ def create_or_login(resp):
     with a terrible URL which we certainly don't want.
     """
     session['openid'] = resp.identity_url
-    user = g.couch.get(session['openid'])
-    if user is not None:
+    doc = all_users_view[session['openid']]
+    if doc.total_rows > 0:
+	user = doc.rows[0]
         flash(u'Successfully signed in')
         g.user = user
         return redirect(oid.get_next_url())
@@ -88,8 +112,8 @@ def create_profile():
             flash(u'Error: you have to enter a valid email address')
         else:
             flash(u'Profile successfully created')
-	    document = dict(name=name, email=email, nickname=nickname)
-	    g.couch[session['openid']] = document
+	    document = dict(openid=session['openid'], type='user', name=name, email=email, nickname=nickname, date=get_date(), active='true')
+	    g.couch[uuid.uuid4().hex] = document
             return redirect(oid.get_next_url())
     return render_template('create_profile.html', next_url=oid.get_next_url())
 
@@ -99,7 +123,8 @@ def edit_profile():
     """Updates a profile"""
     if g.user is None:
         return redirect(url_for('login'))
-    form = dict(name=g.user['name'], email=g.user['email'], nickname=g.user['nickname'])
+    user = g.couch[g.user['id']]
+    form = dict(name=user['name'], email=user['email'], nickname=user['nickname'])
     if request.method == 'POST':
         if 'delete' in request.form:
             g.couch.delete(g.user)
@@ -117,20 +142,48 @@ def edit_profile():
             flash(u'Error: you have to enter a valid email address')
         else:
             flash(u'Profile successfully changed')
-            g.user['name'] = form['name']
-            g.user['email'] = form['email']
-            g.user['nickname'] = form['nickname']
-            g.couch[g.user.id] = g.user
+            user['name'] = form['name']
+            user['email'] = form['email']
+            user['nickname'] = form['nickname']
+            g.couch[g.user['id']] = user
             return redirect(url_for('edit_profile'))
     return render_template('edit_profile.html', form=form)
 
 
 @app.route('/logout')
 def logout():
+    """Logout, deletes Session"""
     session.pop('openid', None)
     flash(u'You were signed out')
     return redirect(oid.get_next_url())
+    
 
+@app.route('/new', methods=['GET', 'POST'])
+def new():
+    """Creates a new Entry"""
+    if g.user is None:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        subject = request.form['subject']
+        text = request.form['edit']
+        if not subject:
+            flash(u'Error: you have to enter a Subject')
+        else:
+            flash(u'New Entry successfully created')
+	    document = dict(title=subject, type='text', content=text, user=g.user['_id'], date=get_date())
+	    g.couch[uuid.uuid4().hex] = document
+	    return redirect(url_for('index'))
+    return render_template('new.html')
+    
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    if request.method == 'POST':
+        key = request.form.get('search')
+    return key
 
+@app.route('/test/<key>')
+def test(key):
+    return key
+    
 if __name__ == '__main__':
   app.run()

@@ -1,10 +1,13 @@
 {% extends "layout.html" %}
+{% block head %}
+{% endblock %}
 {% block body %}
-  <h2>Overview</h2>
-  {% if g.user %}
-  <p>
-    Hello {{ g.user.name }}!
-  {% endif %}
-  <p>
-    This is just an example page so that something is here.
+  <div id=contacts>
+  </div>
+  {% for row in texts %}
+  <div class=blob>
+  <p>{{ row.key }}</p>
+  <pre>{{ row.value }}</pre>
+  </div>
+  {% endfor %}
 {% endblock %}
