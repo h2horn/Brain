@@ -1,0 +1,50 @@
+#contacts {
+    width: 200px;
+    height: 600px;
+    float: left;
+    border : 5px solid #E04F33;
+    border-radius : 2px;
+}
+
+#docs {
+/*     margin-left: 220px; */
+/*     float: right; */
+    min-height: 600px;
+    min-width: 600px;
+    border : 5px solid #005CBD;
+    border-radius : 2px;
+}
+
+.blob {
+/*     background: -webkit-gradient(linear, 0 0, 0 8%, from(#335E79), to(#FFF)); */
+    padding : 0px;
+    margin: 0px;
+/*     text-align: right; */
+/*     width: 100%; */
+/*     float: left; */
+/*     margin-top: 5px; */
+/*     padding-bottom: 5px; */
+/*     margin-bottom : 10px; */ 
+/*     border-bottom: 1px solid rgba(51,94,121,0.2); */
+}
+
+.buser {
+    min-width: 25ex;
+    white-space: nowrap;
+    border-bottom: 1px solid rgba(51,94,121,0.2);
+}
+
+.bvalue {
+    width: 100%;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(51,94,121,0.2);
+}
+/*.blob:nth-child(even) {
+    background: #EEEEEE;
+}*/
+.bdate {
+    white-space: nowrap;
+    border-bottom: 1px solid rgba(51,94,121,0.2);
+/*     float: right; */
+/*     padding: 0 10px; */
+}

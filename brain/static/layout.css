@@ -1,0 +1,240 @@
+body {
+    font-family: 'Georgia', serif;
+    font-size: 16px;
+    color: #3E4349;
+/*     color: #335E79; */
+    padding: 0;
+}
+
+a {
+    color: #335E79;
+    text-decoration : none;
+}
+
+#head {
+/*     display: none; */
+    border-bottom: 1px #005CBD solid;
+    padding-bottom: 8px;
+    margin: 8px 0px;
+}
+#head table {
+    width: 100%;
+    border-collapse : collapse;
+}
+
+#logo {
+/*     margin: 0 10px; */
+    padding: 0 5px;
+/*     background: #335E79; */
+    border-radius : 2px;
+/*     display: table-cell; */
+/*     height: 100%; */
+/*     width: 100px; */
+/*     height: 22px; */
+}
+#logo div {
+/*     margin: 0 10px; */
+    padding: 0;
+/*     background: #335E79; */
+/*     display: table-cell; */
+/*     height: 100%; */
+/*     width: 100px; */
+    height: 22px;
+}
+#logo img {
+/*     margin: 0; */
+/*     padding: 0; */
+    width: 100px;
+    height: 23px;
+}
+
+#search {
+    float : left;
+    border: 1px solid #005CBD;
+    border-radius : 2px;
+    padding: 0;
+    margin: 0 10px;
+/*     display: table-cell; */
+}
+#search td {
+    padding : 0;
+    margin: 0;
+}
+#search input {
+    border: 0px;
+    font-size: 18px;
+    margin: 0;
+    color: #3E4349;
+}
+#search input[type="submit"] {
+    background: #D5DEE3;
+/*     background: -webkit-gradient(linear, 0 0, 100% 0, from(#FFF), to(#88A1B1)); */
+    color: #335E79;
+/*     padding: 2px; */
+}
+
+#navigation {
+    white-space: nowrap;
+    padding: 0 8px;
+    background: #D5DEE3;
+    border-radius : 2px;
+    color: #FFFFFF;
+/*     display: table-cell; */
+}
+#navigation a {
+    color: #335E79;
+}
+.home {
+    background: url(icons/Nuvola_filesystems_folder_home.svg) no-repeat left bottom;
+    padding-left: 24px;
+    background-size: 20px;
+}
+.login{
+    background: url(icons/Nuvola_apps_personal.svg) no-repeat left bottom;
+    padding-left: 18px;
+    background-size: 13px;
+}
+.login:hover .drop {
+    display: block;
+}
+.profile {
+    background: url(icons/Nuvola_apps_kcmsystem.svg) no-repeat left bottom;
+    padding-left: 22px;
+    background-size: 19px;
+}
+.logout {
+    background: url(icons/stop.svg) no-repeat left bottom;
+    padding-left: 22px;
+    background-size: 19px;
+}
+.new {
+    background: url(icons/Gtk-new.svg) no-repeat left bottom;
+    padding-left: 22px;
+    background-size: 19px;
+}
+.drop {
+    display: none;
+    position: absolute;
+    background: #DDE4E9;
+    background: -moz-linear-gradient(top, #DDE4E9, rgba(255,255,255,0));
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#DDE4E9), to(rgba(255,255,255,0)));
+    right: 8px;
+    padding: 4px;
+    padding-bottom: 40px;
+    text-align: left;
+}
+.list {
+/*     border-top: 1px dotted #3E4349; */
+    border-radius : 2px;
+    padding: 3px 6px;
+    margin: 6px;
+    background: rgba(255,255,255,0.8);
+/*     float: left; */
+    list-style-type: circle;
+}
+.google, .openid {
+    padding-left: 20px;
+    background-size: 15px;
+    margin: 0;
+    padding-top: 5px;
+/*     border-top: 1px solid #3E4349; */
+}
+.google {
+    background: url(icons/Google_G.svg) no-repeat left bottom;
+}
+.openid {
+    background: url(icons/OpenID_short.svg) no-repeat left bottom;
+}
+
+#main {
+    display: none;
+}
+
+#center {
+/*     position : relative; */
+    width: 800px;
+    margin: 0px auto;
+    padding: 10px 15px;
+    border: 5px solid #335E79;
+/*     background-color: #DDE4E9; */
+    border-radius : 2px;
+    text-align: center;
+}
+
+#edit {
+    width: 700px;
+    height: 500px;
+    border-radius : 2px;
+    border: 1px solid #88A1B1;
+}
+
+#ttitle {
+    width : 500px;
+    border-radius : 2px;
+}
+
+.max {
+    width : 50%;
+    display: table-cell;
+}
+
+.message {
+    color: #335E79;
+    padding: 0 5px;
+    background: #CADEEB;
+    text-align: center;
+    white-space: nowrap;
+    border-radius : 2px;
+}
+.message p {
+    background: url(icons/Emblem-notice.svg) no-repeat left bottom;
+    padding-left: 22px;
+    background-size: 19px;
+    margin: 0;
+}
+
+.error {
+    color: #783232;
+    padding: 0 5px;
+    background: #EBCACA;
+    text-align: center;
+    white-space: nowrap;
+    border-radius : 2px;
+}
+.error p {
+    background: url(icons/Emblem-important-red.svg) no-repeat left bottom;
+    padding-left: 22px;
+    background-size: 19px;
+    margin: 0;
+}
+
+#bottom {
+    border-top: 1px #005CBD solid;
+    margin-top: 8px;
+    padding-top: 5px;
+    text-align: center;
+    font-size: 12px;
+}
+
+input {
+    font-family: 'Georgia', serif;
+    border: 1px solid #88A1B1;
+    color: #335E79;
+    padding: 2px;
+    margin: 0px;
+}
+
+input[type="submit"] {
+    background: #CADEEB;
+    color: #335E79;
+    border-color: #335E79;
+}
+
+input[name="openid"] {
+    background: url(openid.png) 4px no-repeat;
+    padding-left: 24px;
+}
+
+h1, h2 {
+    font-weight: normal;
+}
