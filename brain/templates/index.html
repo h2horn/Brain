@@ -1,13 +1,20 @@
 {% extends "layout.html" %}
 {% block head %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='index.css') }}">
 {% endblock %}
 {% block body %}
-  <div id=contacts>
-  </div>
+<!--  <div id=contacts>
+test
+  </div>-->
+  <div id=docs>
+  <table>
   {% for row in texts %}
-  <div class=blob>
-  <p>{{ row.key }}</p>
-  <pre>{{ row.value }}</pre>
-  </div>
+  <tr class=blob>
+  <td class=buser>{{ row.value.user }}</td>
+  <td class=bvalue><span>{{ row.value.title }} </span><span> {{ row.value.content }}</span></td>
+  <td class=bdate>{{ row.key }}</td>
+  </tr>
   {% endfor %}
+  </table>
+  </div>
 {% endblock %}

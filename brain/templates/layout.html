@@ -3,7 +3,7 @@
 <head>
 <title>{% block title %}Welcome{% endblock %} | Brainedge</title>
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/vnd.microsoft.icon">
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='layout.css') }}">
 <script type=text/javascript src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script type=text/javascript>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
@@ -14,16 +14,17 @@
 <body>
 <div id=head>
 <table>
-<tbody>
 <tr>
+<td id=logo><div>
+<img src="{{ url_for('static', filename='logo.svg') }}" alt="">
+</div></td>
 <td id=search>
 <form action="{{ url_for('search') }}" method=post>
 <table>
-<tbody>
 <tr>
-<td><input type=search name=search size=20 value="" autofocus></td>
-<td><input type=submit value="Search"></td>
-</tbody>
+<td class=cell><input type=search name=search size=20 value="" autofocus></td>
+<td class=cell><input type=submit value="Search"></td>
+</tr>
 </table>
 </form>
 </td>
@@ -33,16 +34,17 @@
 {% endfor %}
 <td class=max></td>
 <td id=navigation>
-  <a class=home href="{{ url_for('index') }}">overview</a>
+  <a class=home href="{{ url_for('index') }}">Overview</a>
   {% if g.user %}
-  || <a class=new href="{{ url_for('new') }}">new</a>
-  || <span class=login><a href="#">{{ g.user.value }}</a>
+  || <a class=new href="{{ url_for('new') }}">New</a>
+  || <a class=new href="{{ url_for('view_web') }}">Web</a>
+  || <span class=login><a href="#">{{ g.user.nickname }}</a>
   <span class=drop>
   <div class=list><a class=profile href="{{ url_for('edit_profile') }}">Profile</a></div>
   <div class=list><a class=logout href="{{ url_for('logout') }}">Sign out</a></div>
   </span></span>
   {% else %}
-  || <span class=login><a href="#">Sign in</a>
+  || <span class=login><a href="{{ url_for('login') }}">Sign in</a>
   <span class=drop>
   <div class=list><a class=google href="{{ url_for('login') }}?openid=https://www.google.com/accounts/o8/id">Google</a></div>
   <div class=list><a class=openid href="{{ url_for('login') }}">OpenID</a></div>
@@ -50,11 +52,13 @@
   {% endif %}
 </td>
 </tr>
-</tbody>
 </table>
 </div>
 <div id=main>
 {% block body %}{% endblock %}
+</div>
+<div id=bottom>
+© 2010 Cornu
 </div>
 </body>
 </html>

@@ -20,13 +20,13 @@ manager = CouchDBManager(auto_sync=False)
 all_users_view = ViewDefinition('users', 'all', '''\
     function (doc) {
         if (doc.type == 'user') {
-            emit(doc.openid, doc.nickname)
+            emit(doc.openid, null)
         };
     }''')
 all_text_view = ViewDefinition('text', 'all', '''\
     function (doc) {
-        if (doc.type == 'text') {
-            emit(doc.title, doc.content)
+        if (doc.type != 'user') {
+            emit(doc.date, {title: doc.title, content: doc.content, user: doc.user})
         };
     }''')
 manager.add_viewdef((all_users_view, all_text_view))
@@ -43,20 +43,23 @@ def get_date():
 @app.before_request
 def before_request():
     g.user = None
-    if 'openid' in session:
-	doc = all_users_view[session['openid']]
-	if doc.total_rows > 0:		# mindestens ein Eintrag gefunden
-	    g.user = doc.rows[0]
+    if 'nickname' in session:
+	#doc = all_users_view[session['openid']]
+	#if doc.total_rows > 0:		# mindestens ein Eintrag gefunden
+	#    g.user = doc.rows[0]
 	# ToDo fehler bei mehreren Treffern 
+	g.user = session
 
 @app.route('/')
 def index():
     #return jsonify(g.user)
     texts = all_text_view()
-    #return jsonify(texts.rows)
+    for row in texts.rows :
+      row['value']['content'] = row['value']['content'][:60]
+	#return jsonify(texts.rows)
     return render_template('index.html', texts=texts.rows)
     
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/auth/login', methods=['GET', 'POST'])
 @oid.loginhandler
 def login():
     """Does the login via OpenID.  Has to call into `oid.try_login`
@@ -85,15 +88,16 @@ def create_or_login(resp):
     doc = all_users_view[session['openid']]
     if doc.total_rows > 0:
 	user = doc.rows[0]
+	session['nickname'] = user['id']
         flash(u'Successfully signed in')
-        g.user = user
+        #g.user = user
         return redirect(oid.get_next_url())
     return redirect(url_for('create_profile', next=oid.get_next_url(),
                             name=resp.fullname, nickname=resp.nickname,
                             email=resp.email))
 
 
-@app.route('/create-profile', methods=['GET', 'POST'])
+@app.route('/user/create-profile', methods=['GET', 'POST'])
 def create_profile():
     """If this is the user's first login, the create_or_login function
     will redirect here so that the user can set up his profile.
@@ -112,19 +116,19 @@ def create_profile():
             flash(u'Error: you have to enter a valid email address')
         else:
             flash(u'Profile successfully created')
-	    document = dict(openid=session['openid'], type='user', name=name, email=email, nickname=nickname, date=get_date(), active='true')
-	    g.couch[uuid.uuid4().hex] = document
+	    document = dict(openid=session['openid'], type='user', name=name, email=email, date=get_date(), active='true')
+	    g.couch[nickname] = document
             return redirect(oid.get_next_url())
     return render_template('create_profile.html', next_url=oid.get_next_url())
 
 
-@app.route('/profile', methods=['GET', 'POST'])
+@app.route('/user/profile', methods=['GET', 'POST'])
 def edit_profile():
     """Updates a profile"""
     if g.user is None:
         return redirect(url_for('login'))
-    user = g.couch[g.user['id']]
-    form = dict(name=user['name'], email=user['email'], nickname=user['nickname'])
+    user = g.couch[g.user['nickname']]
+    form = dict(name=user['name'], email=user['email'], nickname=user['_id'])
     if request.method == 'POST':
         if 'delete' in request.form:
             g.couch.delete(g.user)
@@ -150,10 +154,11 @@ def edit_profile():
     return render_template('edit_profile.html', form=form)
 
 
-@app.route('/logout')
+@app.route('/auth/logout')
 def logout():
     """Logout, deletes Session"""
     session.pop('openid', None)
+    session.pop('nickname', None)
     flash(u'You were signed out')
     return redirect(oid.get_next_url())
     
@@ -166,22 +171,45 @@ def new():
     if request.method == 'POST':
         subject = request.form['subject']
         text = request.form['edit']
+        ttype = request.form['type']
         if not subject:
             flash(u'Error: you have to enter a Subject')
         else:
             flash(u'New Entry successfully created')
-	    document = dict(title=subject, type='text', content=text, user=g.user['_id'], date=get_date())
-	    g.couch[uuid.uuid4().hex] = document
+	    document = dict(title=subject, type=ttype, content=text, user=g.user['id'], date=get_date())
+	    g.couch[uuid.uuid1().hex] = document	# UUID timebased
 	    return redirect(url_for('index'))
     return render_template('new.html')
+    
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+    """Creates a new Entry"""
+    if g.user is None:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        subject = request.form['subject']
+        text = request.form['edit']
+        ttype = request.form['type']
+        if not subject:
+            flash(u'Error: you have to enter a Subject')
+        else:
+            flash(u'New Entry successfully created')
+	    document = dict(title=subject, type=ttype, content=text, user=g.user['id'], date=get_date())
+	    g.couch[uuid.uuid1().hex] = document	# UUID timebased
+	    return redirect(url_for('index'))
+    return render_template('upload.html')
+
+@app.route('/view/web')
+def view_web():
+    return render_template('web.html')
     
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == 'POST':
         key = request.form.get('search')
-    return key
+    return redirect('/'+ key)
 
-@app.route('/test/<key>')
+@app.route('/<key>')
 def test(key):
     return key
     
