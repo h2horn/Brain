@@ -18,8 +18,11 @@ a {
     margin: 8px 0px;
 }
 #head table {
-    width: 100%;
+/*     width: 100%; */
     border-collapse : collapse;
+}
+#head a {
+    color: #000000;
 }
 
 #logo {
@@ -57,7 +60,7 @@ a {
 /*     display: table-cell; */
 }
 #search td {
-    padding : 0;
+    padding: 0;
     margin: 0;
 }
 #search input {
@@ -67,22 +70,33 @@ a {
     color: #3E4349;
 }
 #search input[type="submit"] {
-    background: #D5DEE3;
+    background: #FFFFFF;
+    border-left: 1px solid #005CBD;
 /*     background: -webkit-gradient(linear, 0 0, 100% 0, from(#FFF), to(#88A1B1)); */
-    color: #335E79;
+    color: #3E4349;
 /*     padding: 2px; */
+}
+
+#feedback {
+    padding: 0 5px;
+    margin: 10px;
+    background: #FFE994;
+    border-radius : 2px;
+/*     border-spacing: 10px 0; */
+}
+#feedback a {
+    background: url(icons/Erlenmeyer_flask_Icon.svg) no-repeat left bottom;
+    padding-left: 25px;
+    background-size: 23px;
 }
 
 #navigation {
     white-space: nowrap;
     padding: 0 8px;
-    background: #D5DEE3;
+    background: #CCDEF2;
     border-radius : 2px;
     color: #FFFFFF;
 /*     display: table-cell; */
-}
-#navigation a {
-    color: #335E79;
 }
 .home {
     background: url(icons/Nuvola_filesystems_folder_home.svg) no-repeat left bottom;
@@ -179,9 +193,9 @@ a {
 }
 
 .message {
-    color: #335E79;
+/*     color: #335E79; */
     padding: 0 5px;
-    background: #CADEEB;
+    background: #FFE994;
     text-align: center;
     white-space: nowrap;
     border-radius : 2px;
@@ -189,7 +203,7 @@ a {
 .message p {
     background: url(icons/Emblem-notice.svg) no-repeat left bottom;
     padding-left: 22px;
-    background-size: 19px;
+    background-size: 17px;
     margin: 0;
 }
 

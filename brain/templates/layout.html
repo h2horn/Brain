@@ -33,6 +33,8 @@
   <td class=message><p>{{ message }}</p></td>
 {% endfor %}
 <td class=max></td>
+<td id=feedback><a href="#">Feedback</a></td>
+<td>&nbsp;</td>
 <td id=navigation>
   <a class=home href="{{ url_for('index') }}">Overview</a>
   {% if g.user %}
