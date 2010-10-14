@@ -1,3 +1,4 @@
+#!/ usr/bin/env python
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, request, g, session, flash, \
      redirect, url_for, abort, jsonify
@@ -5,7 +6,7 @@ from flask import Flask, render_template, request, g, session, flash, \
 from flaskext.couchdb import CouchDBManager, ViewDefinition
 from flaskext.openid import OpenID
 from datetime import datetime
-import uuid
+from uuid import uuid1
 
 app = Flask(__name__)
 app.config.update(
@@ -38,7 +39,8 @@ oid = OpenID(app)
 
 #----------------------------------------#
 def get_date():
-    return datetime.utcnow().strftime('%Y/%m/%d %H:%M:%S')
+    #return datetime.utcnow().strftime('%Y/%m/%d %H:%M:%S')
+    return datetime.utcnow()
     
 @app.before_request
 def before_request():
@@ -176,8 +178,8 @@ def new():
             flash(u'Error: you have to enter a Subject')
         else:
             flash(u'New Entry successfully created')
-	    document = dict(title=subject, type=ttype, content=text, user=g.user['id'], date=get_date())
-	    g.couch[uuid.uuid1().hex] = document	# UUID timebased
+	    document = dict(title=subject, type=ttype, content=text, user=g.user['nickname'], date=get_date())
+	    g.couch[uuid1().hex] = document	# UUID timebased
 	    return redirect(url_for('index'))
     return render_template('new.html')
     
@@ -195,7 +197,7 @@ def upload():
         else:
             flash(u'New Entry successfully created')
 	    document = dict(title=subject, type=ttype, content=text, user=g.user['id'], date=get_date())
-	    g.couch[uuid.uuid1().hex] = document	# UUID timebased
+	    g.couch[uuid1().hex] = document	# UUID timebased
 	    return redirect(url_for('index'))
     return render_template('upload.html')
 
