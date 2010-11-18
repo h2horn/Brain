@@ -10,3 +10,5 @@ TOOLS
 - CouchDB ( http://couchdb.apache.org/ )
 - Flask-CouchDB ( http://packages.python.org/Flask-CouchDB/ )
 - Flask-OpenID ( http://packages.python.org/Flask-OpenID/ )
+- Flask-LessCSS ( http://pypi.python.org/pypi/flask-lesscss/ )
+- Flask-WTF ( http://packages.python.org/Flask-WTF/ )

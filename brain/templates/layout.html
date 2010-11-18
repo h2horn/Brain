@@ -19,7 +19,7 @@
 <img src="{{ url_for('static', filename='logo.svg') }}" alt="">
 </div></td>
 <td id=search>
-<form action="{{ url_for('search') }}" method=post>
+<form action="{{ url_for('text.search') }}" method=post>
 <table>
 <tr>
 <td class=cell><input type=search name=search size=20 value="" autofocus></td>
@@ -36,20 +36,20 @@
 <td id=feedback><a href="#">Feedback</a></td>
 <td>&nbsp;</td>
 <td id=navigation>
-  <a class=home href="{{ url_for('index') }}">Overview</a>
+  <a class=home href="{{ url_for('text.index') }}">Overview</a>
   {% if g.user %}
-  || <a class=new href="{{ url_for('new') }}">New</a>
-  || <a class=new href="{{ url_for('view_web') }}">Web</a>
+  || <a class=new href="{{ url_for('text.new') }}">New</a>
+  || <a class=new href="{{ url_for('text.view_web') }}">Web</a>
   || <span class=login><a href="#">{{ g.user.nickname }}</a>
   <span class=drop>
-  <div class=list><a class=profile href="{{ url_for('edit_profile') }}">Profile</a></div>
-  <div class=list><a class=logout href="{{ url_for('logout') }}">Sign out</a></div>
+  <div class=list><a class=profile href="{{ url_for('auth.edit_profile') }}">Profile</a></div>
+  <div class=list><a class=logout href="{{ url_for('auth.logout') }}">Sign out</a></div>
   </span></span>
   {% else %}
-  || <span class=login><a href="{{ url_for('login') }}">Sign in</a>
+  || <span class=login><a href="{{ url_for('auth.login') }}">Sign in</a>
   <span class=drop>
-  <div class=list><a class=google href="{{ url_for('login') }}?openid=https://www.google.com/accounts/o8/id">Google</a></div>
-  <div class=list><a class=openid href="{{ url_for('login') }}">OpenID</a></div>
+  <div class=list><a class=google href="{{ url_for('auth.login') }}?openid=https://www.google.com/accounts/o8/id">Google</a></div>
+  <div class=list><a class=openid href="{{ url_for('auth.login') }}">OpenID</a></div>
   </span></span>
   {% endif %}
 </td>

@@ -1,0 +1,4 @@
+DEBUG = True
+SECRET_KEY = '\xb8n\x9c\xe2&]\x85\x1e\xf1\xf2\x938\xe4SA\xc5\x08\xcf\x00\x92\xf5\x7f\xbe\xc8'
+COUCHDB_SERVER = 'http://localhost:5984'
+COUCHDB_DATABASE = 'brain'
