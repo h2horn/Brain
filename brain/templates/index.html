@@ -1,20 +1,24 @@
 {% extends "layout.html" %}
 {% block head %}
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='index.css') }}">
+<link rel='stylesheet' type='text/css' href='{{ url_for("static",filename="index.css") }}'>
 {% endblock %}
 {% block body %}
 <!--  <div id=contacts>
 test
   </div>-->
-  <div id=docs>
-  <table>
-  {% for row in texts %}
-  <tr class=blob>
-  <td class=buser>{{ row.value.user }}</td>
-  <td class=bvalue><span>{{ row.value.title }} </span><span> {{ row.value.content }}</span></td>
-  <td class=bdate>{{ row.key }}</td>
-  </tr>
-  {% endfor %}
-  </table>
+  <div id='docs'>
+    <ul>
+        {% for row in texts %}
+        <li class='blob' id='{{ row.id}}'>
+            <span class='buser'>{{ row.value.user }}</span>
+            <span class='btitle'>{{ row.value.title }}</span>
+            <span class='bdate'>{{ row.key }}</span>
+            <span class='bvalue'>{{ row.value.content }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+  </div>
+  <div id='detail'>
+testet
   </div>
 {% endblock %}

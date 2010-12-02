@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block head %}
+<script type=text/javascript src="{{ url_for('static', filename='editable.js') }}"></script>
+<link rel='stylesheet' type='text/css' href='{{ url_for('static',filename='new.css') }}'>
+{% endblock %}
+{% block body %}
+<div id='center'>
+    <ul id='controls'>
+        <li id='bold' title='Bold'><img src="{{ url_for('static',
+        filename='icons/format/bold.svg') }}"></li>
+        <li id='italic' title='Italic'><img src="{{ url_for('static',
+        filename='icons/format/italic.svg') }}"></li>
+        <li id='line' title='Underline'><img src="{{ url_for('static',
+        filename='icons/format/line.svg') }}"></li>
+        <li id='strike' title='Strikethrough'><img src="{{ url_for('static',
+        filename='icons/format/strike.svg') }}"></li>
+        <li id='size' title='Font size'><img src="{{ url_for('static',
+        filename='icons/format/size.svg') }}"></li>
+        <li id='heading' title='Paragraph heading'><img src="{{ url_for('static',
+        filename='icons/format/head1.svg') }}"></li>
+        <li id='nlist' title='Numbered list'><img src="{{ url_for('static',
+        filename='icons/format/nlist.svg') }}"></li>
+        <li id='blist' title='Bulleted list'><img src="{{ url_for('static',
+        filename='icons/format/blist.svg') }}"></li>
+        <li id='iindent' title='Increase Indent'><img src="{{ url_for('static',
+        filename='icons/format/iindent.svg') }}"></li>
+        <li id='dindent' title='Decrease Indent'><img src="{{ url_for('static',
+        filename='icons/format/dindent.svg') }}"></li>
+        <li id='alignl' title='Alignment Left'><img src="{{ url_for('static',
+        filename='icons/format/alignl.svg') }}"></li>
+        <li id='alignc' title='Alignment Center'><img src="{{ url_for('static',
+        filename='icons/format/alignc.svg') }}"></li>
+        <li id='alignr' title='Alignment Right'><img src="{{ url_for('static',
+        filename='icons/format/alignr.svg') }}"></li>
+    </ul>
+    <iframe id='edit'></iframe>
+</div>
+{% endblock %}

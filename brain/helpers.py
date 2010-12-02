@@ -3,6 +3,8 @@
 
 from datetime import datetime
 import math
+from functools import wraps
+from flask import g, request, redirect, url_for
 
 def get_date():
     return datetime.utcnow().strftime('%Y/%m/%d %H:%M:%S')
@@ -21,3 +23,14 @@ def datetimeformat(value):
     else:
         formatting = 'on %d %b %Y'
     return value.strftime(formatting)
+
+def login_required(f):
+    """ Decorator Function redirecting to Login
+        if no permission
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login'))
+        return f(*args, **kwargs)
+    return decorated_function

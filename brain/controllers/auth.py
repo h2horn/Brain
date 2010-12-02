@@ -67,12 +67,11 @@ def create_profile():
     return render_template('create_profile.html', next_url=oid.get_next_url())
 
 @auth.route('/profile', methods=['GET', 'POST'])
+@login_required
 def edit_profile():
     """ Update the profile """
-    if g.user is None:
-        return redirect(url_for('login'))
-    user = g.couch[g.user['nickname']]
-    form = dict(name=user['name'], email=user['email'], nickname=user['_id'])
+    user = g.couch.get(g.user['nickname'])
+    form = dict(name=user['name'], email=user['email'], nickname=user['nickname'])
     if request.method == 'POST':
         if 'delete' in request.form:
             g.couch.delete(g.user)
@@ -93,7 +92,7 @@ def edit_profile():
             user['name'] = form['name']
             user['email'] = form['email'] 
             user['nickname'] = form['nickname']
-            g.couch[g.user['_id']] = user
+            g.couch.save(user)
             return redirect(url_for('edit_profile'))
     return render_template('edit_profile.html', form=form)
 

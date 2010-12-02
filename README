@@ -12,3 +12,4 @@ TOOLS
 - Flask-OpenID ( http://packages.python.org/Flask-OpenID/ )
 - Flask-LessCSS ( http://pypi.python.org/pypi/flask-lesscss/ )
 - Flask-WTF ( http://packages.python.org/Flask-WTF/ )
+- Flask Celery ( http://celeryproject.org/ )
