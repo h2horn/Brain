@@ -13,8 +13,8 @@ lesscss(app)
 app.config.from_pyfile('../config')
 
 #Module
-app.register_module(auth)   # url_prefix='/auth'
-app.register_module(text)
+app.register_blueprint(auth)   # url_prefix='/auth'
+app.register_blueprint(text)
 oid.init_app(app)
 from brain.couchviews import manager
 manager.setup(app)

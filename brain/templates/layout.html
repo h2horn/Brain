@@ -2,19 +2,19 @@
 <html>
 <head>
 <title>{% block title %}Welcome{% endblock %} | Brainedge</title>
-<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/vnd.microsoft.icon">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='layout.css') }}">
+<link rel="icon" href="{{ url_for('.static', filename='favicon.ico') }}" type="image/vnd.microsoft.icon">
+<link rel="stylesheet" type="text/css" href="{{ url_for('.static', filename='layout.css') }}">
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script type="text/javascript">
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 </script>
-<script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('.static', filename='main.js') }}"></script>
 {% block head %}{% endblock %}
 </head>
 <body>
 <header>
     <a href="{{ url_for('text.index') }}">
-    <img id="logo" src="{{ url_for('static', filename='logo.svg') }}" alt></a>
+    <img id="logo" src="{{ url_for('.static', filename='logo.svg') }}" alt></a>
     <input id="search" type="search" name="search" size="20" value autofocus>
     {% for message in get_flashed_messages() %}
     <span class="message">{{ message }}</span>

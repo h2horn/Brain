@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Module, g, request, session, render_template, flash, redirect, url_for
+from flask import Blueprint, g, request, session, render_template, flash, redirect, url_for
 from flaskext.openid import OpenID
 from brain.couchviews import *
 from brain.helpers import *
 
-auth = Module(__name__)
+auth = Blueprint('auth', __name__)
 
 oid = OpenID()
 
@@ -38,7 +38,7 @@ def create_or_login(resp):
         session['nickname'] = user['id']
         flash(u'Successfully signed in')
         return redirect(oid.get_next_url())
-    return redirect(url_for('create_profile', next=oid.get_next_url(),
+    return redirect(url_for('.create_profile', next=oid.get_next_url(),
                             name=resp.fullname, nickname=resp.nickname,
                             email=resp.email))
 
@@ -46,7 +46,7 @@ def create_or_login(resp):
 def create_profile():
     # if already logged in or no openid url in session
     if g.user is not None or 'openid' not in session:
-        return redirect(url_for('index'))
+        return redirect(url_for('.index'))
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
@@ -77,7 +77,7 @@ def edit_profile():
             g.couch.delete(g.user)
             session.pop('openid', None)
             flash(u'Profile deleted')
-            return redirect(url_for('index'))
+            return redirect(url_for('.index'))
         form['name'] = request.form['name']
         form['email'] = request.form['email']
         form['nickname'] = request.form['nickname']
@@ -93,7 +93,7 @@ def edit_profile():
             user['email'] = form['email'] 
             user['nickname'] = form['nickname']
             g.couch.save(user)
-            return redirect(url_for('edit_profile'))
+            return redirect(url_for('.edit_profile'))
     return render_template('edit_profile.html', form=form)
 
 @auth.route('/logout')
