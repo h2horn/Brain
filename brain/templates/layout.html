@@ -3,64 +3,41 @@
 <head>
 <title>{% block title %}Welcome{% endblock %} | Brainedge</title>
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/vnd.microsoft.icon">
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='layout.css') }}">
-<script type=text/javascript src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-<script type=text/javascript>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='layout.css') }}">
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript">
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 </script>
-<script type=text/javascript src="{{ url_for('static', filename='main.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
 {% block head %}{% endblock %}
 </head>
 <body>
-<div id=head>
-<table>
-<tr>
-<td id=logo><div>
-<img src="{{ url_for('static', filename='logo.svg') }}" alt="">
-</div></td>
-<td id=search>
-<form action="{{ url_for('text.search') }}" method=post>
-<table>
-<tr>
-<td class=cell><input type=search name=search size=20 value="" autofocus></td>
-<td class=cell><input type=submit value="Search"></td>
-</tr>
-</table>
-</form>
-</td>
-<td class=max></td>
-{% for message in get_flashed_messages() %}
-  <td class=message><p>{{ message }}</p></td>
-{% endfor %}
-<td class=max></td>
-<td id=feedback><a href="#">Feedback</a></td>
-<td>&nbsp;</td>
-<td id=navigation>
-  <a class=home href="{{ url_for('text.index') }}">Overview</a>
-  {% if g.user %}
-  || <a class=new href="{{ url_for('text.new') }}">New</a>
-  || <a class=new href="{{ url_for('text.view_web') }}">Web</a>
-  || <span class=login><a href="#">{{ g.user.nickname }}</a>
-  <span class=drop>
-  <div class=list><a class=profile href="{{ url_for('auth.edit_profile') }}">Profile</a></div>
-  <div class=list><a class=logout href="{{ url_for('auth.logout') }}">Sign out</a></div>
-  </span></span>
-  {% else %}
-  || <span class=login><a href="{{ url_for('auth.login') }}">Sign in</a>
-  <span class=drop>
-  <div class=list><a class=google href="{{ url_for('auth.login') }}?openid=https://www.google.com/accounts/o8/id">Google</a></div>
-  <div class=list><a class=openid href="{{ url_for('auth.login') }}">OpenID</a></div>
-  </span></span>
-  {% endif %}
-</td>
-</tr>
-</table>
+<header>
+    <a href="{{ url_for('text.index') }}">
+    <img id="logo" src="{{ url_for('static', filename='logo.svg') }}" alt></a>
+    <input id="search" type="search" name="search" size="20" value autofocus>
+    {% for message in get_flashed_messages() %}
+    <span class="message">{{ message }}</span>
+    {% endfor %}
+    <ul id="nav">
+        <li><a href="#">Feedback</a></li>
+        {% if g.user %}
+        <li><a href="{{ url_for('auth.logout') }}">Sign out</a></li>
+        {% else %}
+        <li><a href="{{ url_for('auth.login') }}">Sign in</a>
+        <ul id="drop">
+        <li><a href="{{ url_for('auth.login') }}?openid=https://www.google.com/accounts/o8/id">Google</a></li>
+        <li><a href="{{ url_for('auth.login') }}">OpenID</a></li>
+        </ul>
+        </li>
+        {% endif %}
+    </ul>
+</header>
+<div id=main role="main">
+    {% block body %}{% endblock %}
 </div>
-<div id=main>
-{% block body %}{% endblock %}
-</div>
-<div id=bottom>
-© 2010 Cornu
-</div>
+<footer>
+    © 2010-2011 Cornu
+</footer>
 </body>
 </html>

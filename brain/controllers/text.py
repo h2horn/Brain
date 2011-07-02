@@ -67,6 +67,18 @@ def edit_doc(doc_id):
 
 @text.route('/html')
 def new_html():
+    if request.method == 'POST':
+        subject = request.form['subject']
+        text = request.form['edit']
+        ttype = request.form['type']
+        if not subject:
+            flash(u'Error: you have to enter a Subject')
+        else:
+            flash(u'New Entry successfully created')
+            document = dict(title=subject, content=text, type=ttype,
+                    user=g.user['nickname'], date=get_date())
+            g.couch[uuid1().hex] = document # UUID timebased
+            return redirect(url_for('index'))
     return render_template('new_html.html')
 
 @text.route('/')

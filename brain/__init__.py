@@ -4,8 +4,10 @@ from flask import Flask, render_template, g, session
 
 from brain.controllers.auth import auth, oid
 from brain.controllers.text import text
+from flaskext.lesscss import lesscss
 
 app = Flask(__name__)
+lesscss(app)
 
 #Config
 app.config.from_pyfile('../config')
